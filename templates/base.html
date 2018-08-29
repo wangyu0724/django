@@ -7,6 +7,27 @@
 <body>
 <h1>我要学PYTHON</h1>
 <h1 style="height:30px">{{ yes|upper }}</h1>
+<hr/>
+<h1 style="height:30px">{{ no }}</h1>
+
+<h1 style="height:30px">{{ flag|first|upper }}</h1>
+
+
+{% for key,value in subject.items %}
+<h1>{{key}}</h1>
+<ul>
+    {% for stu in value %}
+    <li>{{stu}}</li>
+    {% endfor %}
+
+</ul>
+{% endfor %}
+
+{% ifequal flag 'true' %}
+<h1>TRUE</h1>
+{% else %}
+<h1>FALSE</h1>
+{% endifequal %}
 
 <p>嘻嘻嘻嘻嘻</p>
 {% block mainbody %}

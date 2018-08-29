@@ -4,25 +4,3 @@
         <p>继承了 base.html 文件</p>
     {% endblock %}
 
-<h1 style="height:30px">{{ yes|upper }}</h1>
-<hr/>
-<h1 style="height:30px">{{ no }}</h1>
-
-<h1 style="height:30px">{{ flag|first|upper }}</h1>
-
-
-{% for s in subject %}
-<h1>{{s}}</h1>
-<ul>
-    {% for stu in s reversed %}
-    <li>{{stu}}</li>
-    {% endfor %}
-
-</ul>
-{% endfor %}
-
-{% ifequal flag 'true' %}
-    <h1>TRUE</h1>
-{% else %}
-    <h1>FALSE</h1>
-{% endifequal %}
