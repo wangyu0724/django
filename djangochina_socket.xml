@@ -1,0 +1,7 @@
+<uwsgi>
+    <socket>127.0.0.1:8077</socket>
+    <chdir>/Users/zhangmengmeng/guest</chdir>
+    <module>wsgi</module>
+    <processes>4</processes>
+    <daemonize>uwsgi.log</daemonize>
+</uwsgi>

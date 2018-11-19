@@ -89,27 +89,38 @@ def search_guest(request):
 @login_required
 def sign_index(request,eid):
     event = get_object_or_404(Event,id=eid)
-    line = Guest.objects.filter(sign=True)
+    line = Guest.objects.filter(sign=True,event_id=eid)
     guest = Guest.objects.filter(event_id=eid)
-    return render(request,'sign_index.html',{'event':event,'sign':len(line),'guest':len(guest)})
+    return render(request,'sign_index.html',{'event':event,'sign':len(line),'guest_sign':len(guest)})
+
+# 前端签到页面
+def sign_index2(request,event_id):
+    event_name = get_object_or_404(Event, id=event_id)
+    return render(request, 'sign_index2.html',{'eventId': event_id,'eventNanme': event_name})
 
 # 签到动作
 def sign_index_action(request,eid):
     event = get_object_or_404(Event,id=eid)
+    guest_list = Guest.objects.filter(event_id=eid)
+    guest_data = str(len(guest_list))
+    sign_data = 0   #计算发布会“已签到”的数量
+    for guest in guest_list:
+        if guest.sign == True:
+            sign_data += 1
     phone = request.POST.get('phone','')
     print phone
     result = Guest.objects.filter(phone=phone)
     if not result:
-        return render(request,'sign_index.html',{'event':event,'hint':'phone error.'})
+        return render(request,'sign_index.html',{'event':event,'hint':'phone error.','guest_sign':guest_data,'sign':sign_data})
     result = Guest.objects.filter(phone=phone,event_id=eid)
     if not result:
-        return render(request, 'sign_index.html', {'event': event, 'hint': 'event id or phone error.'})
+        return render(request, 'sign_index.html', {'event': event, 'hint': 'event id or phone error.','guest_sign':guest_data,'sign':sign_data})
     result = Guest.objects.get(phone=phone,event_id=eid)
     if result.sign:
-        return render(request,'sign_index.html',{'event':event,'hint':'user has sign in.'})
+        return render(request,'sign_index.html',{'event':event,'hint':'user has sign in.','guest_sign':guest_data,'sign':sign_data})
     else:
         Guest.objects.filter(phone=phone,event_id=eid).update(sign='1')
-        return render(request,'sign_index.html',{'event':event,'hint':'sign in success.','guest':result})
+        return render(request,'sign_index.html',{'event':event,'hint':'sign in success.','guest':result,'guest_sign':guest_data,'sign':str(int(sign_data)+1)})
 
 # 登出
 @login_required

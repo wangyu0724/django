@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^guest_manage/$',views.guest_manage),
     url(r'^search_guest/$',views.search_guest),
     url(r'^sign_index/(?P<eid>[0-9]+)/$',views.sign_index),
+    url(r'^sign_index2/(?P<event_id>[0-9]+)/$', views.sign_index2),
     url(r'^sign_index_action/(?P<eid>[0-9]+)/$',views.sign_index_action),
     url(r'^logout/$', views.logout),
     url(r'^api/',include('sign.urls',namespace='sign'))
