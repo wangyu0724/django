@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>最优算法</title>
+</head>
+<body>
+
+<form action="/calculate" method="post">
+    <div style="height:300px" align="center">
+        {% csrf_token %}
+        <input type="hidden" name="list" value="{{ list }}">
+        <input type="hidden" name="AI_sum" value="{{ AI_sum }}">
+        <input type="hidden" name="Player_sum" value="{{ Player_sum }}">
+
+        <h1>{{ list }}</h1>
+        Player Pick:<input type="text" name="Player_picks" value="{{ Player_picks }}" readonly>
+        AI Pick:<input type="text" name="AI_picks" value="{{ AI_picks }}" readonly>
+        <hr/>
+        {% ifequal first 0 %}
+        {% if AI_sum >= Player_sum %}
+        <h1>YOU LOSE </h1>
+        {% else %}
+        <h1>YOU WIN </h1>
+        {% endif %}
+        {% else %}
+        <input type="radio" name="index" value="First">{{ first }}
+        <input type="radio" name="index" value="Last">{{ last }}
+        <input type="radio" name="index" value="AI">AI先手
+        <input type="submit" value="选择">
+        {% endifequal %}
+
+    </div>
+</form>
+<form action="/find_optimal" method="post">
+    <input type="submit" value="重置">
+</form>
+
+</body>
+</html>
+

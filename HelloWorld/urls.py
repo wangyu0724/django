@@ -26,4 +26,7 @@ urlpatterns = [
     url(r'index', testdb.index),
     url(r'^admin/', admin.site.urls),
 
+    url(r'find_optimal', testdb.find_optimal),
+    url(r'calculate', testdb.calculate),
+
 ]
