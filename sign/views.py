@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from sign.models import Event,Guest
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from django.db.models.aggregates import Count
 # Create your views here.
 def index(request):
 	return render(request,"index.html")
@@ -36,7 +37,9 @@ def event_manage(request):
     event_list = Event.objects.all()
     username = request.session.get('user', '')  # 读取浏览器session
     line = Guest.objects.filter(sign=True)
-    return render(request, "event_manage.html", {"user": username, "events": event_list,'sign_in':len(line)})
+    guest_list = Event.objects.filter(guest__sign=True).annotate(num_events=Count('guest'))
+    all_info = zip(event_list,[x.num_events for x in guest_list])
+    return render(request, "event_manage.html", {"user": username, "events": all_info})
 
 
 

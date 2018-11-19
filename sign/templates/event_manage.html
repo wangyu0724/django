@@ -48,7 +48,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for event in events %}
+						{% for event,sign_count in events %}
 						<tr>
 							<td>{{ event.id }}</td>
 							<td>{{ event.name }}</td>
@@ -58,7 +58,7 @@
 							<td>
 								<a href="/sign_index/{{ event.id }}/" target="{{ event.id }}_blank">sign</a>
 							</td>
-							<td>{{ sign_in }}</td>
+							<td>{{ sign_count }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
