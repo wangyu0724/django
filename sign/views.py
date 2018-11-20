@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from sign.models import Event,Guest
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.db.models.aggregates import Count
+from logging import logging
+_logger = logging.getLogger(__name__)
+
 # Create your views here.
 def index(request):
 	return render(request,"index.html")
@@ -38,6 +41,7 @@ def event_manage(request):
     username = request.session.get('user', '')  # 读取浏览器session
     line = Guest.objects.filter(sign=True)
     guest_list = Event.objects.filter(guest__sign=True).annotate(num_events=Count('guest'))
+    _logger.info('*****%s'%guest_list)
     all_info = zip(event_list,[x.num_events for x in guest_list])
     return render(request, "event_manage.html", {"user": username, "events": all_info})
 
