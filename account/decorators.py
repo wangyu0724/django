@@ -7,21 +7,19 @@ You may obtain a copy of the License at http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
+
+登录装饰器.
 """
-import os
-import sys
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+from functools import wraps
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+from django.utils.decorators import available_attrs
 
-    from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
+def login_exempt(view_func):
+    """登录豁免,被此装饰器修饰的action可以不校验登录."""
+    def wrapped_view(*args, **kwargs):
+        return view_func(*args, **kwargs)
+
+    wrapped_view.login_exempt = True
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)

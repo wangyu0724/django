@@ -7,21 +7,23 @@ You may obtain a copy of the License at http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
+
+This file demonstrates writing tests using the unittest module. These will pass
+when you run "manage.py test".
+
+Replace this with more appropriate tests for your application.
 """
-import os
-import sys
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+# import from apps here
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 
-    from django.core.management import execute_from_command_line
+# import from lib
+from django.test import TestCase
 
-    execute_from_command_line(sys.argv)
+
+class SimpleTest(TestCase):
+    def test_basic_addition(self):
+        """
+        Tests that 1 + 1 always equals 2.
+        """
+        self.assertEqual(1 + 1, 2)

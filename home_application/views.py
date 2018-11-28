@@ -8,20 +8,26 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 """
-import os
-import sys
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+from common.mymako import render_mako_context
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 
-    from django.core.management import execute_from_command_line
+def home(request):
+    """
+    首页
+    """
+    return render_mako_context(request, '/home_application/home.html')
 
-    execute_from_command_line(sys.argv)
+
+def dev_guide(request):
+    """
+    开发指引
+    """
+    return render_mako_context(request, '/home_application/dev_guide.html')
+
+
+def contactus(request):
+    """
+    联系我们
+    """
+    return render_mako_context(request, '/home_application/contact.html')

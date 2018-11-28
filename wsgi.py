@@ -7,21 +7,13 @@ You may obtain a copy of the License at http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
+
+uwsgi config
 """
 import os
-import sys
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+from django.core.wsgi import get_wsgi_application
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 
-    from django.core.management import execute_from_command_line
-
-    execute_from_command_line(sys.argv)
+application = get_wsgi_application()

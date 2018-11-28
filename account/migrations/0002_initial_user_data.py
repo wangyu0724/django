@@ -8,20 +8,29 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 """
-import os
-import sys
+from __future__ import unicode_literals
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+from django.db import migrations
+from django.core import serializers
+from django.conf import settings
+from account.models import BkUser
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 
-    from django.core.management import execute_from_command_line
+def initial_user_data(apps, schema_editor):
+    try:
+        admin_username_list = settings.ADMIN_USERNAME_LIST
+        for username in admin_username_list:
+            BkUser.objects.create_superuser(username)
+    except Exception, e:
+        pass
 
-    execute_from_command_line(sys.argv)
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('account', '0001_initial'),
+    ]
+
+    operations = [
+        migrations.RunPython(initial_user_data),
+    ]

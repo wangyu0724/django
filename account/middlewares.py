@@ -7,21 +7,28 @@ You may obtain a copy of the License at http://opensource.org/licenses/MIT
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
+
+Login middleware.
 """
-import os
-import sys
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+from django.contrib.auth import authenticate
+from django.middleware.csrf import get_token as get_csrf_token
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+from account.accounts import Account
 
-    from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
+class LoginMiddleware(object):
+    """Login middleware."""
+
+    def process_view(self, request, view, args, kwargs):
+        """process_view."""
+        if getattr(view, 'login_exempt', False):
+            return None
+        user = authenticate(request=request)
+        if user:
+            request.user = user
+            get_csrf_token(request)
+            return None
+
+        account = Account()
+        return account.redirect_login(request)

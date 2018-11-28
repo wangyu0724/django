@@ -8,20 +8,20 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 """
-import os
-import sys
 
-if __name__ == '__main__':
-    if 'celery' in sys.argv:
-        if 'eventlet' in sys.argv:
-            import eventlet
-            eventlet.monkey_patch()
-        elif 'gevent' in sys.argv:
-            from gevent import monkey
-            monkey.patch_all()
+# import from lib
+from django.contrib import admin
+# import from apps here
+from app_control.models import FunctionController
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 
-    from django.core.management import execute_from_command_line
+class FunctionControllerAdmin(admin.ModelAdmin):
+    """
+    功能开关表注册设置
+    """
+    list_display = ('func_code', 'func_name', 'enabled', 'create_time', 'func_developer')
+    list_filter = ('func_code',)
+    search_fields = ('func_code',)
 
-    execute_from_command_line(sys.argv)
+
+admin.site.register(FunctionController, FunctionControllerAdmin)
